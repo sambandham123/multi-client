@@ -27,6 +27,8 @@ jobs:
       - run: docker push devopslearnerboy/multi-nginx
       - run: docker push devopslearnerboy/multi-server
       - run: docker push devopslearnerboy/multi-worker
+      - name: Generate deployment package
+        run: zip -r deploy.zip . -x '*.git*'
   beanstalk_deployment:
     runs-on: ubuntu-latest
     needs: [build, after_success_builds]
@@ -40,3 +42,4 @@ jobs:
           existing_bucket_name: elasticbeanstalk-us-west-2-064796296637
           region: us-west-2
           version_label: ${{ github.sha }}
+          deployment_package: deploy.zip
